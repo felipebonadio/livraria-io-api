@@ -74,5 +74,4 @@ public class LivroService {
         }
         livroRepository.delete(deletedLivro.get());
     }
-
 }

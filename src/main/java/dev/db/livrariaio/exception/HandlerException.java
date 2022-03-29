@@ -32,5 +32,4 @@ public class HandlerException {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorResponse(exception.getMessage()));
     }
-
 }
