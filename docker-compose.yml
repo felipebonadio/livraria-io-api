@@ -1,0 +1,29 @@
+version: '3.7'
+volumes:
+    database:
+
+services:
+    db:
+        image: mariadb:latest
+        container_name: livraria-io-mariadb
+        ports:
+            - 3306:3306
+        volumes:
+            - database:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=livraria-io-api
+            - MYSQL_DATABASE=livraria-io-api
+            - MYSQL_USER=livraria-io-api
+            - MYSQL_PASSWORD=livraria-io-api
+
+    phpMyAdmin:
+            image: phpmyadmin/phpmyadmin:latest
+            container_name: livaria-io-phpmyadmin
+            environment:
+                - PMA_ARBITRARY=1
+            links:
+                - db
+            ports:
+                - 80:80
+            volumes:
+                - /sessions
