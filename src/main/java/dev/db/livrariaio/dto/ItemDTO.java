@@ -15,14 +15,14 @@ public class ItemDTO {
 
     private LivroCarrinhoDTO livroCarrinhoDTO;
 
-    private int quantidadeDeLivros;
+    private Integer quantidadeDeLivros;
 
     private BigDecimal precoItem;
 
-    public ItemDTO(Long id, LivroCarrinhoDTO livroCarrinhoDTO, int quantidadeDeLivros, BigDecimal precoItem) {
+    public ItemDTO(Long id, LivroCarrinhoDTO livroCarrinhoDTO, Integer quantidadeDeLivros, BigDecimal precoItem) {
         this.id = id;
         this.livroCarrinhoDTO = livroCarrinhoDTO;
         this.quantidadeDeLivros = 1;
-        this.precoItem = livroCarrinhoDTO.getPreco();
+        this.precoItem = livroCarrinhoDTO.getPreco().multiply(new BigDecimal(this.getQuantidadeDeLivros()));
     }
 }

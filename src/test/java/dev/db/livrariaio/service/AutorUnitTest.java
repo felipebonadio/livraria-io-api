@@ -12,10 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.PersistenceException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static dev.db.livrariaio.LivrariaFactory.criarAutor;
+import static dev.db.livrariaio.LivrariaFactory.criarAutorDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -28,31 +29,12 @@ public class AutorUnitTest {
     @InjectMocks
     private AutorService autorService;
 
-    public AutorDTO criarAutorDTO() {
-        AutorDTO autorDTO = new AutorDTO();
-        autorDTO.setId(1L);
-        autorDTO.setNome("Felipe");
-        autorDTO.setDescricao("Descricao");
-        autorDTO.setEmail("Felipe@felipe");
-        autorDTO.setDataCriacao(LocalDate.now());
-        return autorDTO;
-    }
-
-    public Autor criarAutor() {
-        Autor autor = new Autor();
-        autor.setId(1L);
-        autor.setNome("Felipe");
-        autor.setDescricao("Descricao");
-        autor.setEmail("Felipe@felipe");
-        autor.setDataCriacao(LocalDate.now());
-        return autor;
-    }
 
     @Test
     @DisplayName("Deve retornar um autor por ID")
     void deveRetornarUmAutorPorId() {
         AutorDTO autorDTO = AutorMapper.autorToDTO(criarAutor());
-        when(autorRepository.findById(1L)).thenReturn(Optional.ofNullable(criarAutor()));
+        when(autorRepository.findById(1L)).thenReturn(Optional.of(criarAutor()));
         assertEquals(autorDTO, autorService.findAutorById(1L));
     }
 
@@ -66,8 +48,8 @@ public class AutorUnitTest {
     @Test
     @DisplayName("Deve retornar uma lista de autores")
     void deveRetornarUmaListaDeAutores() {
-        List<Autor> autores = new ArrayList<>();
-        List<AutorDTO> autoresDTO = new ArrayList<>();
+        List<Autor> autores = List.of(criarAutor());
+        List<AutorDTO> autoresDTO = List.of(criarAutorDto());
         when(autorRepository.findAll()).thenReturn(autores);
         assertEquals(autoresDTO, autorService.findAllAutores());
     }
@@ -76,15 +58,15 @@ public class AutorUnitTest {
     @DisplayName("Deve criar um autor")
     void deveCriarUmAutor() {
         when(autorRepository.save(any())).thenReturn(criarAutor());
-        assertEquals(criarAutorDTO(), autorService.saveAutor(criarAutorDTO()));
+        assertEquals(criarAutorDto(), autorService.saveAutor(criarAutorDto()));
     }
 
     @Test
     @DisplayName("Deve atualizar um autor")
     void deveAtualizarUmAutor() {
-        when(autorRepository.findById(1L)).thenReturn(Optional.ofNullable(criarAutor()));
+        when(autorRepository.findById(1L)).thenReturn(Optional.of(criarAutor()));
         when(autorRepository.save(criarAutor())).thenReturn(criarAutor());
-        assertEquals(AutorMapper.autorToDTO(criarAutor()), autorService.updateAutor(criarAutorDTO()));
+        assertEquals(AutorMapper.autorToDTO(criarAutor()), autorService.updateAutor(criarAutorDto()));
     }
 
     @Test
@@ -101,7 +83,7 @@ public class AutorUnitTest {
     @DisplayName("Deve retornar uma exception ao salvar um autor nulo")
     void deveRetornarExceptionalAoCriarAutor() {
         when(autorRepository.save(any())).thenThrow(PersistenceException.class);
-        assertThrows(PersistenceException.class, () -> autorService.saveAutor(criarAutorDTO()));
+        assertThrows(PersistenceException.class, () -> autorService.saveAutor(criarAutorDto()));
     }
 
     @Test

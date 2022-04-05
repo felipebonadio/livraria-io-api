@@ -1,12 +1,13 @@
 package dev.db.livrariaio.service;
 
+import static dev.db.livrariaio.LivrariaFactory.criarCategoria;
+import static dev.db.livrariaio.LivrariaFactory.criarCategoriaDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.PersistenceException;
@@ -31,22 +32,6 @@ public class CategoriaUnitTest {
     @InjectMocks
     private CategoriaService categoriaService;
 
-    public Categoria criarCategoria() {
-        Categoria categoria = new Categoria();
-        categoria.setId(1L);
-        categoria.setNome("Algoritmo");
-        categoria.setDescricao("Descricao");
-        return categoria;
-    }
-
-    public CategoriaDTO criarCategoriaDto() {
-        CategoriaDTO categoriaDTO = new CategoriaDTO();
-        categoriaDTO.setId(1L);
-        categoriaDTO.setNome("Algoritmo");
-        categoriaDTO.setDescricao("Descricao");
-        return categoriaDTO;
-    }
-
     @Test
     @DisplayName("Deve retornar uma categoria por ID")
     void deveRetornarUmaCategoriaPorId() {
@@ -65,8 +50,8 @@ public class CategoriaUnitTest {
     @Test
     @DisplayName("Deve retornar uma lista de categorias")
     void deveRetornarUmaListaDeCategoria() {
-        List<CategoriaDTO> categoriasDTO = new ArrayList<>();
-        List<Categoria> categorias = new ArrayList<>();
+        List<CategoriaDTO> categoriasDTO = List.of(criarCategoriaDto());
+        List<Categoria> categorias = List.of(criarCategoria());
         when(categoriaRepository.findAll()).thenReturn(categorias);
         assertEquals(categoriasDTO, categoriaService.findAllCategorias());
     }

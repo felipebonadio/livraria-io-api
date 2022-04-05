@@ -1,5 +1,8 @@
 package dev.db.livrariaio.service;
 
+import static dev.db.livrariaio.LivrariaFactory.criarLivro;
+import static dev.db.livrariaio.LivrariaFactory.criarLivroDto;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -7,8 +10,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,14 +24,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import dev.db.livrariaio.dto.AutorDTO;
-import dev.db.livrariaio.dto.CategoriaDTO;
 import dev.db.livrariaio.dto.LivroDTO;
 import dev.db.livrariaio.exception.BadRequestException;
 import dev.db.livrariaio.exception.NotFoundException;
 import dev.db.livrariaio.mapper.LivroMapper;
-import dev.db.livrariaio.model.Autor;
-import dev.db.livrariaio.model.Categoria;
+
 import dev.db.livrariaio.model.Livro;
 import dev.db.livrariaio.repository.LivroRepository;
 
@@ -43,77 +41,11 @@ public class LivroUnitTest {
     @InjectMocks
     private LivroService livroService;
 
-    public Categoria criarCategoria() {
-        Categoria categoria = new Categoria();
-        categoria.setId(1L);
-        categoria.setNome("categoria");
-        categoria.setDescricao("descricao");
-        return categoria;
-    }
-
-    public Autor criarAutor() {
-        Autor autor = new Autor();
-        autor.setId(1L);
-        autor.setDataCriacao(LocalDate.now());
-        autor.setNome("nome");
-        autor.setEmail("email");
-        autor.setDescricao("descricao");
-        return autor;
-    }
-
-    public Livro criarLivro() {
-        Livro livro = new Livro();
-        livro.setId(1L);
-        livro.setTitulo("titulo");
-        livro.setNumeroPaginas(50);
-        livro.setIsbn("isbn");
-        livro.setSumario("sumario");
-        livro.setPreco(new BigDecimal("50.00"));
-        livro.setCapa("capa");
-        livro.setDataPublicacao(LocalDate.now());
-        livro.setCategoria(criarCategoria());
-        livro.setAutor(criarAutor());
-        return livro;
-    }
-
-    public CategoriaDTO criarCategoriaDto() {
-        CategoriaDTO categoriaDTO = new CategoriaDTO();
-        categoriaDTO.setId(1L);
-        categoriaDTO.setNome("categoria");
-        categoriaDTO.setDescricao("descricao");
-        return categoriaDTO;
-    }
-
-    public AutorDTO criarAutorDto() {
-        AutorDTO autorDTO = new AutorDTO();
-        autorDTO.setId(1L);
-        autorDTO.setDataCriacao(LocalDate.now());
-        autorDTO.setNome("nome");
-        autorDTO.setEmail("email");
-        autorDTO.setDescricao("descricao");
-        return autorDTO;
-    }
-
-    public LivroDTO criarLivroDto() {
-        LivroDTO livroDTO = new LivroDTO();
-        livroDTO.setId(1L);
-        livroDTO.setTitulo("titulo");
-        livroDTO.setNumeroPaginas(50);
-        livroDTO.setIsbn("isbn");
-        livroDTO.setSumario("sumario");
-        livroDTO.setPreco(new BigDecimal("50.00"));
-        livroDTO.setCapa("capa");
-        livroDTO.setDataPublicacao(LocalDate.now());
-        livroDTO.setCategoriaDTO(criarCategoriaDto());
-        livroDTO.setAutorDTO(criarAutorDto());
-        return livroDTO;
-    }
-
     @Test
     @DisplayName("Deve retornar um livro por ID")
     void deveRetornarUmLivroPorId() {
         LivroDTO livroDTO = LivroMapper.livroToDTO(criarLivro());
-        when(livroRepository.findById(1L)).thenReturn(Optional.ofNullable(criarLivro()));
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(criarLivro()));
         assertEquals(livroDTO, livroService.findLivroById(1L));
     }
 
@@ -171,7 +103,7 @@ public class LivroUnitTest {
     @Test
     @DisplayName("Deve atualizar um livro")
     void deveAtualizarUmLivro() {
-        when(livroRepository.findById(1L)).thenReturn(Optional.ofNullable(criarLivro()));
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(criarLivro()));
         when(livroRepository.save(criarLivro())).thenReturn(criarLivro());
         assertEquals(criarLivroDto(), livroService.updateLivro(criarLivroDto()));
     }

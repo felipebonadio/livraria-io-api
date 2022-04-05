@@ -36,8 +36,6 @@ public class CarrinhoControllerTest {
     @MockBean
     private CarrinhoService carrinhoService;
 
-    Object mapper = new ObjectMapper();
-
     @Test
     @DisplayName("Deve retornar um carrinho por Id")
     void deveRetornarUmCarrinhoPorID() throws Exception{
@@ -88,9 +86,9 @@ public class CarrinhoControllerTest {
         Item item = criarItem();
         CarrinhoDTO carrinhoDTO = CarrinhoMapper.carrinhoToDTO(carrinho);
         carrinhoDTO.setItensDTO(List.of(ItemMapper.itemToDTO(item)));
-        when(carrinhoService.adicionarItemCarrinho(CarrinhoMapper.carrinhoToDTO(carrinho), ItemMapper.itemToDTO(item))).thenReturn(carrinhoDTO);
+        when(carrinhoService.adicionarItemCarrinho(1L, ItemMapper.itemToDTO(item))).thenReturn(carrinhoDTO);
         String atualizarCarrinho = new ObjectMapper().writeValueAsString(carrinhoDTO);
-        mockMvc.perform(put("/carrinhos/adicionar")
+        mockMvc.perform(put("/carrinhos/adicionar/" + criarCarrinho().getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(atualizarCarrinho))
                 .andExpect(status().isOk())
@@ -106,11 +104,11 @@ public class CarrinhoControllerTest {
         Carrinho carrinhoComItem = criarCarrinho();
         carrinhoComItem.adicionarItem(item);
 
-        when(carrinhoService.removerItemCarrinho(CarrinhoMapper.carrinhoToDTO(carrinhoComItem), ItemMapper.itemToDTO(item)))
+        when(carrinhoService.removerItemCarrinho(1L, ItemMapper.itemToDTO(item)))
                 .thenReturn(CarrinhoMapper.carrinhoToDTO(carrinhoVazio));
 
         String carrinhoComItemRemovido = new ObjectMapper().writeValueAsString(carrinhoVazio);
-        mockMvc.perform(put("/carrinhos/remover")
+        mockMvc.perform(put("/carrinhos/remover/" + criarCarrinho().getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(carrinhoComItemRemovido))
                         .andExpect(status().isOk())

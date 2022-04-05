@@ -88,6 +88,7 @@ public class LivrariaFactory {
         Item item = new Item();
         item.setId(1L);
         item.setLivro(criarLivro());
+        item.setQuantidadeDeLivros(1);
         item.setPrecoItem(new BigDecimal("50.00"));
         return item;
     }
@@ -96,6 +97,7 @@ public class LivrariaFactory {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setId(1L);
         itemDTO.setLivroCarrinhoDTO(criarLivroCarrinhoDTO());
+        itemDTO.setQuantidadeDeLivros(1);
         itemDTO.setPrecoItem(new BigDecimal("50.00"));
         return itemDTO;
     }
@@ -104,7 +106,7 @@ public class LivrariaFactory {
         CarrinhoDTO carrinhoDTO = new CarrinhoDTO();
         carrinhoDTO.setId(1L);
         carrinhoDTO.setItensDTO(List.of(criarItemDto()));
-        carrinhoDTO.setPrecoTotal(CarrinhoMapper.dtoToCarrinho(carrinhoDTO).somarPrecoTotal());
+        carrinhoDTO.setPrecoTotal(carrinhoDTO.somarPrecoTotal());
         return carrinhoDTO;
     }
 

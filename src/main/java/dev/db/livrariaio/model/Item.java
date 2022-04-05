@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Item {
@@ -26,4 +25,10 @@ public class Item {
 
     private BigDecimal precoItem;
 
+    public Item(Long id, Livro livro, int quantidadeDeLivros, BigDecimal precoItem) {
+        this.id = id;
+        this.livro = livro;
+        this.quantidadeDeLivros = 1;
+        this.precoItem = livro.getPreco().multiply(new BigDecimal(this.getQuantidadeDeLivros()));
+    }
 }

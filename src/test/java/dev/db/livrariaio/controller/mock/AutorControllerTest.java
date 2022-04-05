@@ -1,5 +1,6 @@
 package dev.db.livrariaio.controller.mock;
 
+import static dev.db.livrariaio.LivrariaFactory.criarAutorDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import java.time.LocalDate;
 import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AutorController.class)
-public class AutorControllerTest {
+public class AutorControllerTest{
 
     @Autowired
     MockMvc mockMvc;
@@ -33,16 +33,6 @@ public class AutorControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    public AutorDTO criarAutorDto() {
-        AutorDTO autorDTO = new AutorDTO();
-        autorDTO.setId(1L);
-        autorDTO.setNome("Felipe");
-        autorDTO.setDescricao("Descricao");
-        autorDTO.setEmail("Felipe@felipe");
-        autorDTO.setDataCriacao(LocalDate.now());
-        return autorDTO;
-    }
-
     @Test
     @DisplayName("Deve retornar um autor por ID")
     void deveRetornarAutorPorId() throws Exception {
@@ -51,7 +41,7 @@ public class AutorControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse()
                 .getContentAsString();
-        assertEquals(autorEsperado, new ObjectMapper().writeValueAsString(criarAutorDto()));
+        assertEquals(autorEsperado, mapper.writeValueAsString(criarAutorDto()));
     }
 
     @Test
@@ -71,7 +61,7 @@ public class AutorControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse()
                 .getContentAsString();
-        assertEquals(listaEsperada, new ObjectMapper().writeValueAsString(autores));
+        assertEquals(listaEsperada, mapper.writeValueAsString(autores));
     }
 
     @Test

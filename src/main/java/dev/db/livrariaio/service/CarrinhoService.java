@@ -41,34 +41,33 @@ public class CarrinhoService {
         return CarrinhoMapper.carrinhoToDTO(carrinhoRepository.save(carrinho));
     }
 
-    public CarrinhoDTO adicionarItemCarrinho(CarrinhoDTO carrinhoDTO, ItemDTO itemDTO) {
-        Optional<Carrinho> carrinhoToFind = carrinhoRepository.findById(carrinhoDTO.getId());
-        if (carrinhoToFind.isEmpty()) {
-            throw new NotFoundException("Não foi possível atualizar o carrinho com o ID: " + carrinhoDTO.getId() + ", pois o mesmo não existe.");
-        }
-        Carrinho carrinhoToUpdate = carrinhoToFind.get();
-        carrinhoToUpdate.adicionarItem(ItemMapper.dtoToItem(itemDTO));
-        
-        return CarrinhoMapper.carrinhoToDTO(carrinhoRepository.save(carrinhoToUpdate));
+    public Carrinho criarCarrinho(){
+        return carrinhoRepository.save(new Carrinho());
     }
 
-    public CarrinhoDTO removerItemCarrinho(CarrinhoDTO carrinhoDTO, ItemDTO itemDTO) {
-        Optional<Carrinho> carrinhoToFind = carrinhoRepository.findById(carrinhoDTO.getId());
+    public CarrinhoDTO adicionarItemCarrinho(Long carrinhoId, ItemDTO itemDTO) {
+        Optional<Carrinho> carrinhoToFind = carrinhoRepository.findById(carrinhoId);
         if (carrinhoToFind.isEmpty()) {
-            throw new NotFoundException("Não foi possível atualizar o carrinho com o ID: " + carrinhoDTO.getId() + ", pois o mesmo não existe.");
+            throw new NotFoundException("Não foi possível atualizar o carrinho com o ID: " + carrinhoId + ", pois o mesmo não existe.");
         }
-        Carrinho carrinhoToUpdate = carrinhoToFind.get();
-        carrinhoToUpdate.removerItem(ItemMapper.dtoToItem(itemDTO));
-        
-        return CarrinhoMapper.carrinhoToDTO(carrinhoRepository.save(carrinhoToUpdate));
+        carrinhoToFind.get().adicionarItem(ItemMapper.dtoToItem(itemDTO));
+        return CarrinhoMapper.carrinhoToDTO(carrinhoRepository.save(carrinhoToFind.get()));
+    }
+
+    public CarrinhoDTO removerItemCarrinho(Long carrinhoId, ItemDTO itemDTO) {
+        Optional<Carrinho> carrinhoToFind = carrinhoRepository.findById(carrinhoId);
+        if (carrinhoToFind.isEmpty()) {
+            throw new NotFoundException("Não foi possível atualizar o carrinho com o ID: " + carrinhoId + ", pois o mesmo não existe.");
+        }
+        carrinhoToFind.get().removerItem(ItemMapper.dtoToItem(itemDTO));
+        return CarrinhoMapper.carrinhoToDTO(carrinhoRepository.save(carrinhoToFind.get()));
     }
 
     public void deleteCarrinho(Long id) {
         Optional<Carrinho> carrinhoToFind = carrinhoRepository.findById(id);
         if(carrinhoToFind.isEmpty()){
-            carrinhoRepository.deleteById(id);
+            throw  new NotFoundException("Não foi possível excluir carrinho");
         }
+        carrinhoRepository.deleteById(id);
     }
-    
-
 }

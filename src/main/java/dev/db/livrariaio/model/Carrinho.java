@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import dev.db.livrariaio.dto.ItemDTO;
 import lombok.*;
 
 
@@ -14,7 +15,6 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class Carrinho {
     @Id
@@ -22,7 +22,7 @@ public class Carrinho {
     private Long id;
 
     @OneToMany
-    private List<Item> itens;
+    private List<Item> itens = new ArrayList<>();
 
     public void adicionarItem(Item item){
         this.itens.add(item);
@@ -36,5 +36,8 @@ public class Carrinho {
         return itens.stream().map(Item::getPrecoItem).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-
+    public Carrinho(Long id, List<Item> itens) {
+        this.id = id;
+        this.itens = itens;
+    }
 }

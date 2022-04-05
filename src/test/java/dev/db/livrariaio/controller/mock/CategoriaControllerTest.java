@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
+import static dev.db.livrariaio.LivrariaFactory.criarCategoriaDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -33,14 +34,6 @@ public class CategoriaControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    public CategoriaDTO criarCategoriaDto() {
-        CategoriaDTO categoriaDTO = new CategoriaDTO();
-        categoriaDTO.setId(1L);
-        categoriaDTO.setNome("Algoritmo");
-        categoriaDTO.setDescricao("Descricao");
-        return categoriaDTO;
-    }
-
     @Test
     @DisplayName("Deve retornar uma categoria por ID")
     void deveRetornarCategoriaPorId() throws Exception {
@@ -49,7 +42,7 @@ public class CategoriaControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse()
                 .getContentAsString();
-        assertEquals(categoriaEsperado, new ObjectMapper().writeValueAsString(criarCategoriaDto()));
+        assertEquals(categoriaEsperado, mapper.writeValueAsString(criarCategoriaDto()));
     }
 
     @Test
@@ -69,7 +62,7 @@ public class CategoriaControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse()
                 .getContentAsString();
-        assertEquals(listaEsperada, new ObjectMapper().writeValueAsString(categorias));
+        assertEquals(listaEsperada, mapper.writeValueAsString(categorias));
     }
 
     @Test

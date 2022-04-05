@@ -66,7 +66,7 @@ public class CarrinhoUnitTest {
         when(carrinhoRepository.findById(1L)).thenReturn(Optional.of(carrinhoVazio));
         when(carrinhoRepository.save(any())).thenReturn(carrinhoComItem);
 
-        assertEquals(CarrinhoMapper.carrinhoToDTO(carrinhoComItem), carrinhoService.adicionarItemCarrinho(CarrinhoMapper.carrinhoToDTO(carrinhoVazio), ItemMapper.itemToDTO(item)));
+        assertEquals(CarrinhoMapper.carrinhoToDTO(carrinhoComItem), carrinhoService.adicionarItemCarrinho(1L, ItemMapper.itemToDTO(item)));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class CarrinhoUnitTest {
         when(carrinhoRepository.save(any())).thenReturn(carrinhoComItemRemovido);
 
         assertEquals(CarrinhoMapper.carrinhoToDTO(carrinhoComItemRemovido),
-                carrinhoService.removerItemCarrinho(CarrinhoMapper.carrinhoToDTO(carrinhoComItem), ItemMapper.itemToDTO(item)));
+                carrinhoService.removerItemCarrinho(1L, ItemMapper.itemToDTO(item)));
     }
 
     @Test

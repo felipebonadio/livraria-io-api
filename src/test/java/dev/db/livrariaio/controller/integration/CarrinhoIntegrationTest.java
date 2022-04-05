@@ -3,6 +3,7 @@ package dev.db.livrariaio.controller.integration;
 import dev.db.livrariaio.dto.*;
 import dev.db.livrariaio.mapper.*;
 import dev.db.livrariaio.model.Carrinho;
+import dev.db.livrariaio.model.Item;
 import dev.db.livrariaio.model.Livro;
 import dev.db.livrariaio.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class CarrinhoIntegrationTest extends BaseIT {
 
@@ -28,13 +31,13 @@ public class CarrinhoIntegrationTest extends BaseIT {
     private CategoriaRepository categoriaRepository;
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Autowired
-    LivroRepository livroRepository;
+    private LivroRepository livroRepository;
 
     @Autowired
-    CarrinhoRepository carrinhoRepository;
+    private CarrinhoRepository carrinhoRepository;
 
     @BeforeEach
     public void setUp() {
@@ -56,32 +59,66 @@ public class CarrinhoIntegrationTest extends BaseIT {
         categoriaRepository.save(CategoriaMapper.dtoToCategoria(categoria));
 
         Livro livro = new Livro(1L, "linguagem c", "capitulo 1 e capitulo 2",
-                new BigDecimal("59"), 230, "ISBN", LocalDate.now(),  "capa",
+                new BigDecimal("59.00"), 230, "ISBN", LocalDate.now(),  "capa",
                 CategoriaMapper.dtoToCategoria(categoria), AutorMapper.dtoToAutor(autor));
+                livroRepository.save(livro);
 
-        livroRepository.save(livro);
         LivroCarrinhoDTO livroCarrinhoDTO = LivroCarrinhoMapper.livroToDTO(livro);
-
-        ItemDTO item =  new ItemDTO(1L, livroCarrinhoDTO, 1, new BigDecimal(50.00));
+        ItemDTO item =  new ItemDTO(1L, livroCarrinhoDTO, 1, new BigDecimal("50.00"));
         itemRepository.save(ItemMapper.dtoToItem(item));
 
-        List<ItemDTO> itemDtoList = new ArrayList<ItemDTO>();
-        itemDtoList.add(item);
+        Carrinho carrinho = new Carrinho(1L, List.of(ItemMapper.dtoToItem(item)));
 
-        CarrinhoDTO carrinhoDTO = new CarrinhoDTO(1L, itemDtoList, new BigDecimal(50.00));
+        CarrinhoDTO carrinhoDTO = CarrinhoMapper.carrinhoToDTO(carrinho);
 
-        Carrinho carrinho = CarrinhoMapper.dtoToCarrinho(carrinhoDTO);
-       // carrinhoRepository.save(CarrinhoMapper.dtoToCarrinho(carrinho));
 
-        ResponseEntity<CarrinhoDTO> responseEntity = this.restTemplate
-                .postForEntity(baseUrl, carrinho, CarrinhoDTO.class);
+        ResponseEntity<CarrinhoDTO> responseCarrinho = this.restTemplate.postForEntity(baseUrl, carrinhoDTO, CarrinhoDTO.class);
 
-        assertEquals(201, responseEntity.getStatusCodeValue());
-        assertEquals(carrinho, responseEntity.getBody());
+        assertEquals(201, responseCarrinho.getStatusCodeValue());
+        assertEquals(carrinhoDTO, responseCarrinho.getBody());
 
         CarrinhoDTO carrinhoToFind = this.restTemplate.getForObject(baseUrl.concat("/{id}"), CarrinhoDTO.class, 1);
-        assertEquals(carrinho, carrinhoToFind);
+        assertEquals(responseCarrinho.getBody(), carrinhoToFind);
     }
+
+    @Test
+    @DisplayName("Deve persistir e remover um carrinho")
+    public void devePersistirRemoverUmCarrinho() {
+        AutorDTO autor = new AutorDTO(1L, "guilherme", "guilherme@email.com", "autor renomado", LocalDate.now());
+        autorRepository.save(AutorMapper.dtoToAutor(autor));
+
+        CategoriaDTO categoria = new CategoriaDTO(1L, "programacao", "descricao tal");
+        categoriaRepository.save(CategoriaMapper.dtoToCategoria(categoria));
+
+        Livro livro = new Livro(1L, "linguagem c", "capitulo 1 e capitulo 2",
+                new BigDecimal("59.00"), 230, "ISBN", LocalDate.now(),  "capa",
+                CategoriaMapper.dtoToCategoria(categoria), AutorMapper.dtoToAutor(autor));
+        livroRepository.save(livro);
+
+        LivroCarrinhoDTO livroCarrinhoDTO = LivroCarrinhoMapper.livroToDTO(livro);
+        ItemDTO item =  new ItemDTO(1L, livroCarrinhoDTO, 1, new BigDecimal("50.00"));
+        itemRepository.save(ItemMapper.dtoToItem(item));
+
+        Carrinho carrinho = new Carrinho(1L, List.of(ItemMapper.dtoToItem(item)));
+
+        CarrinhoDTO carrinhoDTO = CarrinhoMapper.carrinhoToDTO(carrinho);
+
+        ResponseEntity<CarrinhoDTO> responseCarrinho = this.restTemplate.postForEntity(baseUrl, carrinhoDTO, CarrinhoDTO.class);
+
+        assertEquals(201, responseCarrinho.getStatusCodeValue());
+        assertEquals(carrinhoDTO.getId(), responseCarrinho.getBody().getId());
+
+        this.restTemplate.delete(baseUrl.concat("/{id}"), CarrinhoDTO.class, 1);
+        ResponseEntity<CarrinhoDTO> carrinhoToFind = this.restTemplate
+                .getForEntity(baseUrl.concat("/{id}"), CarrinhoDTO.class, 1);
+
+        assertEquals(HttpStatus.NOT_FOUND, carrinhoToFind.getStatusCode());
+        boolean carrinhoExiste = carrinhoRepository.existsById(1L);
+        assertFalse(carrinhoExiste);
+
+
+    }
+
 
 
 }

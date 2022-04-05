@@ -1,5 +1,6 @@
 package dev.db.livrariaio.controller.mock;
 
+import static dev.db.livrariaio.LivrariaFactory.criarLivroDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -13,8 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,8 +30,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import dev.db.livrariaio.dto.AutorDTO;
-import dev.db.livrariaio.dto.CategoriaDTO;
 import dev.db.livrariaio.dto.LivroDTO;
 import dev.db.livrariaio.exception.DomainBusinessException;
 import dev.db.livrariaio.exception.NotFoundException;
@@ -48,33 +45,6 @@ public class LivroControllerTest {
         private LivroService livroService;
 
         ObjectMapper mapper = new ObjectMapper();
-
-        public LivroDTO criarLivroDto() {
-                LivroDTO livroDTO = new LivroDTO();
-                CategoriaDTO categoriaDTO = new CategoriaDTO();
-                AutorDTO autorDTO = new AutorDTO();
-                categoriaDTO.setId(1L);
-                categoriaDTO.setNome("categoria");
-                categoriaDTO.setDescricao("descricao");
-
-                autorDTO.setId(1L);
-                autorDTO.setDataCriacao(LocalDate.now());
-                autorDTO.setNome("nome");
-                autorDTO.setEmail("email");
-                autorDTO.setDescricao("descricao");
-
-                livroDTO.setId(1L);
-                livroDTO.setTitulo("titulo");
-                livroDTO.setNumeroPaginas(50);
-                livroDTO.setIsbn("isbn");
-                livroDTO.setSumario("sumario");
-                livroDTO.setPreco(new BigDecimal("50.00"));
-                livroDTO.setCapa("capa");
-                livroDTO.setDataPublicacao(LocalDate.now());
-                livroDTO.setAutorDTO(autorDTO);
-                livroDTO.setCategoriaDTO(categoriaDTO);
-                return livroDTO;
-        }
 
         @Test
         @DisplayName("Deve retornar um livro por ID")

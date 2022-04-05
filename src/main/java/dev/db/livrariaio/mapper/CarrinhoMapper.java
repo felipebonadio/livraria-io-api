@@ -3,6 +3,8 @@ package dev.db.livrariaio.mapper;
 import dev.db.livrariaio.dto.CarrinhoDTO;
 import dev.db.livrariaio.model.Carrinho;
 
+import java.util.List;
+
 public class CarrinhoMapper {
     public static CarrinhoDTO carrinhoToDTO(Carrinho carrinho) {
         return CarrinhoDTO.builder()

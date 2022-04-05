@@ -71,7 +71,7 @@ public class ItemUnitTest {
     void deveAtualizarUmItem() {
         Item item = criarItem();
         ItemDTO itemDTO = criarItemDto();
-        when(itemRepository.findById(1L)).thenReturn(Optional.ofNullable(item));
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         when(itemRepository.save(Objects.requireNonNull(item))).thenReturn(item);
         assertEquals(ItemMapper.itemToDTO(item), itemService.updateItem(itemDTO));
     }
