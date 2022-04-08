@@ -1,6 +1,6 @@
 package dev.db.livrariaio.controller;
 
-import dev.db.livrariaio.model.Carrinho;
+import dev.db.livrariaio.dto.CarrinhoLocalDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/carrinhos")
 @CrossOrigin(exposedHeaders = "errors, content-type")
 public class CarrinhoController {
-    
+
     private final CarrinhoService carrinhoService;
 
     public CarrinhoController(CarrinhoService carrinhoService) {
@@ -40,18 +40,20 @@ public class CarrinhoController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Carrinho> criarCarrinho() {
+    public ResponseEntity<CarrinhoLocalDTO> criarCarrinho() {
         return new ResponseEntity<>(this.carrinhoService.criarCarrinho(), HttpStatus.CREATED);
     }
 
     @PutMapping("/adicionar/{carrinhoId}")
-    public ResponseEntity<CarrinhoDTO> adicionarItemCarrinho(@PathVariable Long carrinhoId, @RequestBody ItemDTO itemDTO ) {
+    public ResponseEntity<CarrinhoDTO> adicionarItemCarrinho(@PathVariable Long carrinhoId,
+            @RequestBody ItemDTO itemDTO) {
         CarrinhoDTO carrinhoToUpdate = carrinhoService.adicionarItemCarrinho(carrinhoId, itemDTO);
         return ResponseEntity.ok(carrinhoToUpdate);
     }
 
     @PutMapping("/remover/{carrinhoId}")
-    public ResponseEntity<CarrinhoDTO> removerItemCarrinho(@PathVariable Long carrinhoId, @RequestBody ItemDTO itemDTO ) {
+    public ResponseEntity<CarrinhoDTO> removerItemCarrinho(@PathVariable Long carrinhoId,
+            @RequestBody ItemDTO itemDTO) {
         CarrinhoDTO carrinhoToUpdate = carrinhoService.removerItemCarrinho(carrinhoId, itemDTO);
         return ResponseEntity.ok(carrinhoToUpdate);
     }

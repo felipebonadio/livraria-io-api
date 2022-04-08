@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AutorController.class)
-public class AutorControllerTest{
+public class AutorControllerTest {
 
     @Autowired
     MockMvc mockMvc;

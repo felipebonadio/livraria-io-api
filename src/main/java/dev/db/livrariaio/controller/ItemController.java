@@ -43,11 +43,21 @@ public class ItemController {
         return ResponseEntity.ok(itemToUpdate);
     }
 
+    @PutMapping("/aumentar/{itemId}")
+    public ResponseEntity<ItemDTO> aumentarQuantidadeLivro(@PathVariable Long itemId) {
+        ItemDTO itemToUpdate = itemService.aumentarQuantidadeLivro(itemId);
+        return ResponseEntity.ok(itemToUpdate);
+    }
+
+    @PutMapping("/diminuir/{itemId}")
+    public ResponseEntity<ItemDTO> diminuirQuantidadeLivro(@PathVariable Long itemId) {
+        ItemDTO itemToUpdate = itemService.diminuirQuantidadeLivro(itemId);
+        return ResponseEntity.ok(itemToUpdate);
+    }
+
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Item> deleteById(@PathVariable Long itemId) {
         this.itemService.deleteItem(itemId);
         return ResponseEntity.noContent().build();
     }
 }
-
-

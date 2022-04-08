@@ -86,7 +86,7 @@ public class CarrinhoUnitTest {
     }
 
     @Test
-    @DisplayName("Deve adicionar um item ao carrinho")
+    @DisplayName("Deve retornar preço do item no carrinho ")
     void deveRetornarUmItemComValor50() {
         CarrinhoDTO carrinhoDTO = criarCarrinhoDTO();
         assertEquals(new BigDecimal("50.00"), carrinhoDTO.getPrecoTotal());

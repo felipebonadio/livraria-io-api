@@ -22,7 +22,7 @@ public class ItemDTO {
     public ItemDTO(Long id, LivroCarrinhoDTO livroCarrinhoDTO, Integer quantidadeDeLivros, BigDecimal precoItem) {
         this.id = id;
         this.livroCarrinhoDTO = livroCarrinhoDTO;
-        this.quantidadeDeLivros = 1;
+        this.quantidadeDeLivros = quantidadeDeLivros;
         this.precoItem = livroCarrinhoDTO.getPreco().multiply(new BigDecimal(this.getQuantidadeDeLivros()));
     }
 }

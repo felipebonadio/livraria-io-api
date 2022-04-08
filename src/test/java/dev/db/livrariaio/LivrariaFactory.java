@@ -1,7 +1,6 @@
 package dev.db.livrariaio;
 
 import dev.db.livrariaio.dto.*;
-import dev.db.livrariaio.mapper.CarrinhoMapper;
 import dev.db.livrariaio.model.*;
 
 import java.math.BigDecimal;
@@ -102,7 +101,7 @@ public class LivrariaFactory {
         return itemDTO;
     }
 
-    public static CarrinhoDTO criarCarrinhoDTO(){
+    public static CarrinhoDTO criarCarrinhoDTO() {
         CarrinhoDTO carrinhoDTO = new CarrinhoDTO();
         carrinhoDTO.setId(1L);
         carrinhoDTO.setItensDTO(List.of(criarItemDto()));
@@ -110,7 +109,7 @@ public class LivrariaFactory {
         return carrinhoDTO;
     }
 
-    public static Carrinho criarCarrinho(){
+    public static Carrinho criarCarrinho() {
         Carrinho carrinho = new Carrinho();
         carrinho.setId(1L);
         return carrinho;

@@ -73,8 +73,8 @@ public class ItemControllerTest {
         when(itemService.saveItem(itemDTO)).thenReturn(itemDTO);
         String salvarItem = mapper.writeValueAsString(itemDTO);
         mockMvc.perform(post("/itens")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(salvarItem))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(salvarItem))
                 .andExpect(content().json(salvarItem))
                 .andExpect(status().isCreated());
     }
@@ -85,8 +85,8 @@ public class ItemControllerTest {
         when(itemService.updateItem(criarItemDto())).thenReturn(criarItemDto());
         String atualizarItem = mapper.writeValueAsString(criarItemDto());
         mockMvc.perform(put("/itens")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(atualizarItem))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(atualizarItem))
                 .andExpect(status().isOk());
     }
 
@@ -96,8 +96,8 @@ public class ItemControllerTest {
         when(itemService.updateItem(criarItemDto())).thenThrow(NotFoundException.class);
         String itemNaoEncontrado = mapper.writeValueAsString(criarItemDto());
         mockMvc.perform(put("/itens")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(itemNaoEncontrado))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(itemNaoEncontrado))
                 .andExpect(status().isNotFound());
     }
 

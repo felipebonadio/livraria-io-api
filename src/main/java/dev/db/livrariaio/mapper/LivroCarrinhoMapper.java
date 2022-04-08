@@ -13,7 +13,7 @@ public class LivroCarrinhoMapper {
                 .build();
     }
 
-    public static Livro dtoToLivro(LivroCarrinhoDTO livroCarrinhoDTO){
+    public static Livro dtoToLivro(LivroCarrinhoDTO livroCarrinhoDTO) {
         return Livro.builder()
                 .id(livroCarrinhoDTO.getId())
                 .titulo(livroCarrinhoDTO.getTitulo())

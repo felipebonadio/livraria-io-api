@@ -29,7 +29,6 @@ public class AutorUnitTest {
     @InjectMocks
     private AutorService autorService;
 
-
     @Test
     @DisplayName("Deve retornar um autor por ID")
     void deveRetornarUmAutorPorId() {

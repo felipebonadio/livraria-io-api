@@ -58,12 +58,16 @@ public class LivroService {
         livroToUpdate.setTitulo(requireNonNullElse(livroDTO.getTitulo(), livroToUpdate.getTitulo()));
         livroToUpdate.setSumario(requireNonNullElse(livroDTO.getSumario(), livroToUpdate.getSumario()));
         livroToUpdate.setPreco(requireNonNullElse(livroDTO.getPreco(), livroToUpdate.getPreco()));
-        livroToUpdate.setDataPublicacao(requireNonNullElse(livroDTO.getDataPublicacao(), livroToUpdate.getDataPublicacao()));
+        livroToUpdate
+                .setDataPublicacao(requireNonNullElse(livroDTO.getDataPublicacao(), livroToUpdate.getDataPublicacao()));
         livroToUpdate.setCapa(requireNonNullElse(livroDTO.getCapa(), livroToUpdate.getCapa()));
         livroToUpdate.setIsbn(requireNonNullElse(livroDTO.getIsbn(), livroToUpdate.getIsbn()));
-        livroToUpdate.setNumeroPaginas(requireNonNullElse(livroDTO.getNumeroPaginas(), livroToUpdate.getNumeroPaginas()));
-        livroToUpdate.setAutor(requireNonNullElse(AutorMapper.dtoToAutor(livroDTO.getAutorDTO()), livroToUpdate.getAutor()));
-        livroToUpdate.setCategoria(requireNonNullElse(CategoriaMapper.dtoToCategoria(livroDTO.getCategoriaDTO()), livroToUpdate.getCategoria()));
+        livroToUpdate
+                .setNumeroPaginas(requireNonNullElse(livroDTO.getNumeroPaginas(), livroToUpdate.getNumeroPaginas()));
+        livroToUpdate
+                .setAutor(requireNonNullElse(AutorMapper.dtoToAutor(livroDTO.getAutorDTO()), livroToUpdate.getAutor()));
+        livroToUpdate.setCategoria(requireNonNullElse(CategoriaMapper.dtoToCategoria(livroDTO.getCategoriaDTO()),
+                livroToUpdate.getCategoria()));
         return LivroMapper.livroToDTO(livroRepository.save(livroToUpdate));
     }
 

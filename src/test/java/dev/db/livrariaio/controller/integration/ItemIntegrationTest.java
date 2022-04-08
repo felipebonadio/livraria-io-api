@@ -4,10 +4,7 @@ import dev.db.livrariaio.dto.*;
 import dev.db.livrariaio.mapper.*;
 import dev.db.livrariaio.model.Item;
 import dev.db.livrariaio.model.Livro;
-import dev.db.livrariaio.repository.AutorRepository;
-import dev.db.livrariaio.repository.CategoriaRepository;
-import dev.db.livrariaio.repository.ItemRepository;
-import dev.db.livrariaio.repository.LivroRepository;
+import dev.db.livrariaio.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +33,9 @@ public class ItemIntegrationTest extends BaseIT {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
+
     @BeforeEach
     public void setUp() {
 
@@ -56,12 +56,15 @@ public class ItemIntegrationTest extends BaseIT {
         categoriaRepository.save(CategoriaMapper.dtoToCategoria(categoria));
 
         Livro livro = new Livro(1L, "linguagem c", "capitulo 1 e capitulo 2",
-                new BigDecimal("59"), 230, "ISBN", LocalDate.now(),  "capa", CategoriaMapper.dtoToCategoria(categoria), AutorMapper.dtoToAutor(autor));
+                new BigDecimal("59"), 230, "ISBN", LocalDate.now(), "capa", CategoriaMapper.dtoToCategoria(categoria),
+                AutorMapper.dtoToAutor(autor));
 
         livroRepository.save(livro);
-        LivroCarrinhoDTO livroCarrinhoDTO = LivroCarrinhoMapper.livroToDTO(livro);
 
-        Item item = new Item(1L, livro, 1,new BigDecimal("50.00"));
+        CarrinhoDTO carrinho = new CarrinhoDTO(1L);
+        carrinhoRepository.save(CarrinhoMapper.dtoToCarrinho(carrinho));
+
+        Item item = new Item(1L, CarrinhoMapper.dtoToCarrinho(carrinho), livro, 1, new BigDecimal("50.00"));
 
         ItemDTO itemDTO = ItemMapper.itemToDTO(item);
         ResponseEntity<ItemDTO> responseItem = this.restTemplate.postForEntity(baseUrl, itemDTO, ItemDTO.class);
@@ -83,18 +86,20 @@ public class ItemIntegrationTest extends BaseIT {
         categoriaRepository.save(CategoriaMapper.dtoToCategoria(categoria));
 
         Livro livro = new Livro(1L, "linguagem c", "capitulo 1 e capitulo 2",
-                new BigDecimal("59"), 230, "ISBN", LocalDate.now(),  "capa", CategoriaMapper.dtoToCategoria(categoria), AutorMapper.dtoToAutor(autor));
+                new BigDecimal("59"), 230, "ISBN", LocalDate.now(), "capa", CategoriaMapper.dtoToCategoria(categoria),
+                AutorMapper.dtoToAutor(autor));
 
         livroRepository.save(livro);
-        LivroCarrinhoDTO livroCarrinhoDTO = LivroCarrinhoMapper.livroToDTO(livro);
 
-        Item item = new Item(1L, livro, 1,new BigDecimal("50.00"));
+        CarrinhoDTO carrinho = new CarrinhoDTO(1L);
+        carrinhoRepository.save(CarrinhoMapper.dtoToCarrinho(carrinho));
+
+        Item item = new Item(1L, CarrinhoMapper.dtoToCarrinho(carrinho), livro, 1, new BigDecimal("50.00"));
 
         ItemDTO itemDTO = ItemMapper.itemToDTO(item);
         ResponseEntity<ItemDTO> responseItem = this.restTemplate.postForEntity(baseUrl, itemDTO, ItemDTO.class);
         assertEquals(201, responseItem.getStatusCodeValue());
         assertEquals(itemDTO.getId(), responseItem.getBody().getId());
-
 
         this.restTemplate.delete(baseUrl.concat("/{id}"), 1);
         ResponseEntity<ItemDTO> itemToFind = this.restTemplate

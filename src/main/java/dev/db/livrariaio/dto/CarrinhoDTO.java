@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.db.livrariaio.model.Item;
 import lombok.*;
 
 @Getter
@@ -20,7 +19,7 @@ public class CarrinhoDTO {
 
     private BigDecimal precoTotal;
 
-    public BigDecimal somarPrecoTotal(){
+    public BigDecimal somarPrecoTotal() {
         return itensDTO.stream().map(ItemDTO::getPrecoItem).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -28,5 +27,9 @@ public class CarrinhoDTO {
         this.id = id;
         this.itensDTO = itensDTO;
         this.precoTotal = this.somarPrecoTotal();
+    }
+
+    public CarrinhoDTO(Long id) {
+        this.id = id;
     }
 }

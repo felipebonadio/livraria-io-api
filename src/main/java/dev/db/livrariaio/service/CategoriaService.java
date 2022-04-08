@@ -56,7 +56,8 @@ public class CategoriaService {
         }
         Categoria categoriaToUpdate = categoriaToFind.get();
         categoriaToUpdate.setNome(requireNonNullElse(categoriaDTO.getNome(), categoriaToUpdate.getNome()));
-        categoriaToUpdate.setDescricao(requireNonNullElse(categoriaDTO.getDescricao(), categoriaToUpdate.getDescricao()));
+        categoriaToUpdate
+                .setDescricao(requireNonNullElse(categoriaDTO.getDescricao(), categoriaToUpdate.getDescricao()));
         return CategoriaMapper.categoriaToDTO(categoriaRepository.save(categoriaToUpdate));
     }
 

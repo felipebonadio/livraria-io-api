@@ -17,18 +17,30 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Carrinho carrinho;
+
     @OneToOne
     @JoinColumn(name = "livro_id")
     private Livro livro;
 
-    private int quantidadeDeLivros;
+    private Integer quantidadeDeLivros;
 
     private BigDecimal precoItem;
 
-    public Item(Long id, Livro livro, int quantidadeDeLivros, BigDecimal precoItem) {
+    public void aumentarQuantidade() {
+        this.quantidadeDeLivros++;
+    }
+
+    public void diminuirQuantidade() {
+        this.quantidadeDeLivros--;
+    }
+
+    public Item(Long id, Carrinho carrinho, Livro livro, Integer quantidadeDeLivros, BigDecimal precoItem) {
         this.id = id;
+        this.carrinho = carrinho;
         this.livro = livro;
-        this.quantidadeDeLivros = 1;
+        this.quantidadeDeLivros = quantidadeDeLivros;
         this.precoItem = livro.getPreco().multiply(new BigDecimal(this.getQuantidadeDeLivros()));
     }
 }
