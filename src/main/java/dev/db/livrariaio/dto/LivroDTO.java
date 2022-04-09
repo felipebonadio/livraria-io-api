@@ -35,4 +35,20 @@ public class LivroDTO {
     private CategoriaDTO categoriaDTO;
 
     private AutorDTO autorDTO;
+
+    @Override
+    public String toString() {
+        return "LivroDTO{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", sumario='" + sumario + '\'' +
+                ", preco=" + preco +
+                ", capa='" + capa + '\'' +
+                ", numeroPaginas=" + numeroPaginas +
+                ", isbn='" + isbn + '\'' +
+                ", dataPublicacao=" + dataPublicacao +
+                ", categoriaDTO=" + categoriaDTO +
+                ", autorDTO=" + autorDTO +
+                '}';
+    }
 }

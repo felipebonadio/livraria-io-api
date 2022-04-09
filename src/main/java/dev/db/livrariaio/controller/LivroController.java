@@ -51,6 +51,7 @@ public class LivroController {
 
     @PostMapping
     public ResponseEntity<LivroDTO> saveLivro(@RequestBody @Valid LivroDTO livroDTO) {
+        System.out.println(livroDTO);
         return new ResponseEntity<>(this.livroService.saveLivro(livroDTO), HttpStatus.CREATED);
     }
 
