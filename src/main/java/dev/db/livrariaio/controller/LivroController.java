@@ -3,6 +3,8 @@ package dev.db.livrariaio.controller;
 import dev.db.livrariaio.dto.LivroDTO;
 import dev.db.livrariaio.model.Livro;
 import dev.db.livrariaio.service.LivroService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ public class LivroController {
     }
 
     @GetMapping
+    @Cacheable(value = "livros")
     public ResponseEntity<Page<LivroDTO>> getLivros(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable paging = PageRequest.of(page, size);
@@ -50,18 +53,21 @@ public class LivroController {
     }
 
     @PostMapping
+    @CacheEvict("livros")
     public ResponseEntity<LivroDTO> saveLivro(@RequestBody @Valid LivroDTO livroDTO) {
         System.out.println(livroDTO);
         return new ResponseEntity<>(this.livroService.saveLivro(livroDTO), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @CacheEvict("livros")
     public ResponseEntity<LivroDTO> updateLivro(@RequestBody LivroDTO livroDTO) {
         LivroDTO livroToUpdate = livroService.updateLivro(livroDTO);
         return ResponseEntity.ok(livroToUpdate);
     }
 
     @DeleteMapping("/{livroId}")
+    @CacheEvict("livros")
     public ResponseEntity<Livro> deleteById(@PathVariable Long livroId) {
         this.livroService.deleteLivro(livroId);
         return ResponseEntity.noContent().build();
