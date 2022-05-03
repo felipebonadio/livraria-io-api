@@ -8,10 +8,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/livros")
@@ -36,6 +39,11 @@ public class LivroController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable paging = PageRequest.of(page, size);
         return ResponseEntity.ok(this.livroService.findAllLivros(paging));
+    }
+    @GetMapping("/lancamentos")
+    public ResponseEntity<List<LivroDTO>> getLancamentos(@RequestParam("tresMeses") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInicial,
+                                                         @RequestParam("atual") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate dataFinal){
+        return ResponseEntity.ok(livroService.findLancamentos(dataInicial, dataFinal));
     }
 
     @GetMapping("/categorias/{categoria}")

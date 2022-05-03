@@ -1,5 +1,7 @@
 package dev.db.livrariaio.service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +43,10 @@ public class LivroService {
 
     public Page<LivroDTO> findAllLivros(Pageable pageable) {
         return livroRepository.findAll(pageable).map(LivroMapper::livroToDTO);
+    }
+
+    public List<LivroDTO> findLancamentos(LocalDate dataInicial, LocalDate dataFinal){
+        return livroRepository.findLancamentos(dataInicial, dataFinal).stream().map(LivroMapper::livroToDTO).toList();
     }
 
     public LivroDTO saveLivro(LivroDTO livroDTO) {
