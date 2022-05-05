@@ -6,6 +6,8 @@ import dev.db.livrariaio.mapper.AutorMapper;
 import dev.db.livrariaio.model.Autor;
 import dev.db.livrariaio.repository.AutorRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,7 @@ public class AutorService {
     public AutorDTO saveAutor(AutorDTO autorDTO) {
         Autor autor = AutorMapper.dtoToAutor(autorDTO);
         autor.setId(null);
+        autor.setDataCriacao(LocalDate.now());
         return AutorMapper.autorToDTO(autorRepository.save(autor));
     }
 
