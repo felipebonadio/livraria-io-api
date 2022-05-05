@@ -41,9 +41,8 @@ public class LivroController {
         return ResponseEntity.ok(this.livroService.findAllLivros(paging));
     }
     @GetMapping("/lancamentos")
-    public ResponseEntity<List<LivroDTO>> getLancamentos(@RequestParam("tresMeses") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInicial,
-                                                         @RequestParam("atual") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate dataFinal){
-        return ResponseEntity.ok(livroService.findLancamentos(dataInicial, dataFinal));
+    public ResponseEntity<List<LivroDTO>> getLancamentos(){
+        return ResponseEntity.ok(livroService.findLancamentos());
     }
 
     @GetMapping("/categorias/{categoria}")

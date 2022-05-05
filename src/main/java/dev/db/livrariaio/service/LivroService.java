@@ -1,6 +1,8 @@
 package dev.db.livrariaio.service;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -45,7 +47,9 @@ public class LivroService {
         return livroRepository.findAll(pageable).map(LivroMapper::livroToDTO);
     }
 
-    public List<LivroDTO> findLancamentos(LocalDate dataInicial, LocalDate dataFinal){
+    public List<LivroDTO> findLancamentos(){
+        LocalDate dataInicial = LocalDate.now().minus( 1, ChronoUnit.YEARS);
+        LocalDate dataFinal = LocalDate.now();
         return livroRepository.findLancamentos(dataInicial, dataFinal).stream().map(LivroMapper::livroToDTO).toList();
     }
 
