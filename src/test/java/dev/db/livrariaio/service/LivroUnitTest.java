@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import dev.db.livrariaio.dto.LivroDTO;
-import dev.db.livrariaio.exception.BadRequestException;
 import dev.db.livrariaio.exception.NotFoundException;
 import dev.db.livrariaio.mapper.LivroMapper;
 
@@ -66,6 +66,15 @@ public class LivroUnitTest {
         Page<LivroDTO> pageLivrosDto = new PageImpl(listaDto, pageable, 1);
         when(livroRepository.findAll(pageable)).thenReturn(pageLivros);
         assertEquals(pageLivrosDto, livroService.findAllLivros(pageable));
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma lista de lançamentos de livros")
+    void deveRetornarUmaListaDeLancamentosLivros() {
+        List<LivroDTO> listaDto = List.of(criarLivroDto());
+        List<Livro> listaLivroEntidade = listaDto.stream().map(LivroMapper::dtoToLivro).toList();
+        when(livroRepository.findLancamentos(any(), any())).thenReturn(listaLivroEntidade);
+        assertEquals(listaDto, livroService.findLancamentos());
     }
 
     @Test
@@ -114,13 +123,6 @@ public class LivroUnitTest {
         when(livroRepository.findById(criarLivro().getId())).thenThrow(NotFoundException.class);
         LivroDTO atualizar = LivroMapper.livroToDTO(criarLivro());
         assertThrows(NotFoundException.class, () -> livroService.updateLivro(atualizar));
-    }
-
-    @Test
-    @DisplayName("Deve retornar uma exception ao salvar um livro nulo")
-    void deveRetornarBadRequestExceptionAoTentarCriarLivroSemTitulo() {
-        when(livroRepository.save(any())).thenThrow(BadRequestException.class);
-        assertThrows(BadRequestException.class, () -> livroService.saveLivro(criarLivroDto()));
     }
 
     @Test

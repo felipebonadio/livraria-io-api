@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -90,5 +91,14 @@ public class CarrinhoUnitTest {
     void deveRetornarUmItemComValor50() {
         CarrinhoDTO carrinhoDTO = criarCarrinhoDTO();
         assertEquals(new BigDecimal("50.00"), carrinhoDTO.getPrecoTotal());
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma lista de carrinhos")
+    void deveRetornarListaCarrinho(){
+        List<CarrinhoDTO> carrinhosDto = List.of(CarrinhoMapper.carrinhoToDTO(criarCarrinho()));
+        List<Carrinho> carrinhos = List.of(criarCarrinho());
+        when(carrinhoRepository.findAll()).thenReturn(carrinhos);
+        assertEquals(carrinhoService.findAllCarrinhos(), carrinhosDto);
     }
 }

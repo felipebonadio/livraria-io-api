@@ -78,6 +78,19 @@ public class LivroControllerTest {
         }
 
         @Test
+        @DisplayName("Deve retornar uma lista de lançamento de livros")
+        void deveRetornarListaDeLancamentosLivros() throws Exception {
+                List<LivroDTO> listaLivros = List.of(criarLivroDto());
+
+                when(livroService.findLancamentos()).thenReturn(listaLivros);
+                String listaEsperada = mockMvc.perform(get("/livros/lancamentos"))
+                        .andExpect(status().isOk())
+                        .andReturn().getResponse()
+                        .getContentAsString();
+                assertEquals(listaEsperada, new ObjectMapper().writeValueAsString(listaLivros));
+        }
+
+        @Test
         @DisplayName("Deve retornar uma lista de livros filtradas por categoria")
         void deveRetornarListaDeLivrosPorCategoria() throws Exception {
                 List<LivroDTO> lista = List.of(criarLivroDto());

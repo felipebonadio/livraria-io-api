@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static dev.db.livrariaio.LivrariaFactory.criarItem;
-import static dev.db.livrariaio.LivrariaFactory.criarItemDto;
+import static dev.db.livrariaio.LivrariaFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,7 +77,6 @@ public class ItemUnitTest {
     @Test
     @DisplayName("Deve retornar uma NotFoundException ao tentar atualizar um item e não encontra-lo")
     void deveRetornarNotFoundExceptionAoTentarAtualizarENaoEncontrar() {
-
         when(itemRepository.findById(1L)).thenThrow(NotFoundException.class);
         ItemDTO atualizar = ItemMapper.itemToDTO(criarItem());
         atualizar.setPrecoItem(new BigDecimal("59.00"));
@@ -95,7 +93,6 @@ public class ItemUnitTest {
     @Test
     @DisplayName("Deve apagar um item")
     void deveApagarUmItem() {
-        criarItem().setId(1L);
         when(itemRepository.findById(1L)).thenReturn(Optional.of(criarItem()));
         itemService.deleteItem(criarItem().getId());
         verify(itemRepository, times(1)).delete(criarItem());

@@ -92,6 +92,15 @@ public class LivrariaFactory {
         return item;
     }
 
+    public static Item criarItemCom2Livros() {
+        Item item = new Item();
+        item.setId(1L);
+        item.setLivro(criarLivro());
+        item.setQuantidadeDeLivros(2);
+        item.setPrecoItem(new BigDecimal("50.00"));
+        return item;
+    }
+
     public static ItemDTO criarItemDto() {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setId(1L);

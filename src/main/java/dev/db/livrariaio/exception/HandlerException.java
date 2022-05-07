@@ -17,14 +17,6 @@ public class HandlerException {
                 .body(new ErrorResponse(exception.getMessage()));
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseBody
-    public ResponseEntity<Object> handleBadRequest(Exception exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorResponse(exception.getMessage()));
-    }
-
     @ExceptionHandler(DomainBusinessException.class)
     @ResponseBody
     public ResponseEntity<Object> handleBusinessException(Exception exception) {

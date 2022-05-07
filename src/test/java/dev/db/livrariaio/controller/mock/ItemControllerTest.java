@@ -80,6 +80,32 @@ public class ItemControllerTest {
     }
 
     @Test
+    @DisplayName("Deve aumentar a quantidade de livro no item")
+    void deveAumentarQuantidadeLivroNoItem() throws Exception {
+        ItemDTO itemDTO = criarItemDto();
+        when(itemService.aumentarQuantidadeLivro(itemDTO.getId())).thenReturn(itemDTO);
+        String aumentarQuantidade = mapper.writeValueAsString(itemDTO);
+        mockMvc.perform(put("/itens/aumentar/" + itemDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(aumentarQuantidade))
+                .andExpect(content().json(aumentarQuantidade))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve diminuir a quantidade de livro no item")
+    void deveDiminuirQuantidadeLivroNoItem() throws Exception {
+        ItemDTO itemDTO = criarItemDto();
+        when(itemService.diminuirQuantidadeLivro(itemDTO.getId())).thenReturn(itemDTO);
+        String diminuirQuantidade = mapper.writeValueAsString(itemDTO);
+        mockMvc.perform(put("/itens/diminuir/" + itemDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(diminuirQuantidade))
+                .andExpect(content().json(diminuirQuantidade))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("Deve atualizar um item")
     void deveAtualizarUmItem() throws Exception {
         when(itemService.updateItem(criarItemDto())).thenReturn(criarItemDto());
