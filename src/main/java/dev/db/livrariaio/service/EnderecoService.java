@@ -3,12 +3,14 @@ package dev.db.livrariaio.service;
 import dev.db.livrariaio.exception.NotFoundException;
 import dev.db.livrariaio.model.Endereco;
 import dev.db.livrariaio.repository.EnderecoRepository;
+import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import static java.util.Objects.requireNonNullElse;
 
+@Service
 public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;

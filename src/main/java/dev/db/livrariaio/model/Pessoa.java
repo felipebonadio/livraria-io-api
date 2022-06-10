@@ -25,6 +25,6 @@ public class Pessoa {
     @OneToOne
     private Carrinho carrinho;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     private Endereco endereco;
 }
