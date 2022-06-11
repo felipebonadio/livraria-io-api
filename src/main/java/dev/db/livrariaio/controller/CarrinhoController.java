@@ -23,19 +23,19 @@ public class CarrinhoController {
     }
 
     @GetMapping("/{carrinhoId}")
-    public ResponseEntity<CarrinhoDTO> getItem(@PathVariable Long carrinhoId) {
+    public ResponseEntity<CarrinhoDTO> getCarrinho(@PathVariable Long carrinhoId) {
         CarrinhoDTO carrinhoToGet = carrinhoService.findCarrinhoById(carrinhoId);
         return ResponseEntity.ok(carrinhoToGet);
     }
 
     @GetMapping()
-    public ResponseEntity<List<CarrinhoDTO>> getItens() {
+    public ResponseEntity<List<CarrinhoDTO>> getCarrinhos() {
         List<CarrinhoDTO> carrinhos = this.carrinhoService.findAllCarrinhos();
         return ResponseEntity.ok(carrinhos);
     }
 
     @PostMapping
-    public ResponseEntity<CarrinhoDTO> saveItem(@RequestBody CarrinhoDTO carrinhoDTO) {
+    public ResponseEntity<CarrinhoDTO> saveCarrinho(@RequestBody CarrinhoDTO carrinhoDTO) {
         return new ResponseEntity<>(this.carrinhoService.saveCarrinho(carrinhoDTO), HttpStatus.CREATED);
     }
 

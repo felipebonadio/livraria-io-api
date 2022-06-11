@@ -5,9 +5,7 @@ import dev.db.livrariaio.controller.EnderecoController;
 import dev.db.livrariaio.exception.DomainBusinessException;
 import dev.db.livrariaio.exception.NotFoundException;
 import dev.db.livrariaio.model.Endereco;
-import dev.db.livrariaio.model.Pessoa;
 import dev.db.livrariaio.service.EnderecoService;
-import dev.db.livrariaio.service.PessoaService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static dev.db.livrariaio.LivrariaFactory.criarEndereco;
-import static dev.db.livrariaio.LivrariaFactory.criarPessoa;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -39,99 +37,97 @@ public class EnderecoControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Test
-    @DisplayName("Deve retornar um endereco por ID")
-    void deveRetornarEnderecoPorId() throws Exception {
-        when(enderecoService.findEnderecoById(1L)).thenReturn(criarEndereco());
-        String endereceEsperada = mockMvc.perform(get("/enderecos/1"))
-                .andExpect(status().isOk())
-                .andReturn().getResponse()
-                .getContentAsString();
-        assertEquals(endereceEsperada, mapper.writeValueAsString(criarEndereco()));
-    }
+//    @Test
+//    @DisplayName("Deve retornar um endereco por ID")
+//    void deveRetornarEnderecoPorId() throws Exception {
+//        when(enderecoService.findEnderecoById(1L)).thenReturn(criarEndereco());
+//        String endereceEsperada = mockMvc.perform(get("/enderecos/1"))
+//                .andExpect(status().isOk())
+//                .andReturn().getResponse()
+//                .getContentAsString();
+//        assertEquals(endereceEsperada, mapper.writeValueAsString(criarEndereco()));
+//    }
+
+//    @Test
+//    @DisplayName("Deve retornar NotFoundException ao pesquisar um endereco por ID e não encontra-lo")
+//    void deveRetornarNotFoundExceptionAoPesquisarEnderecoPorIdENaoEncontrar() throws Exception {
+//        when(enderecoService.findEnderecoById(anyLong())).thenThrow(NotFoundException.class);
+//        mockMvc.perform(get("/enderecos/1"))
+//                .andExpect(status().isNotFound());
+//    }
+//
+//    @Test
+//    @DisplayName("Deve retornar uma lista de enderecos")
+//    void deveRetornarListaDeEnderecos() throws Exception {
+//        List<Endereco> enderecos = List.of(criarEndereco());
+//        when(enderecoService.findAllEndereco()).thenReturn(enderecos);
+//        String listaEsperada = mockMvc.perform(get("/enderecos"))
+//                .andExpect(status().isOk())
+//                .andReturn().getResponse()
+//                .getContentAsString();
+//        assertEquals(listaEsperada, mapper.writeValueAsString(enderecos));
+//    }
 
     @Test
-    @DisplayName("Deve retornar NotFoundException ao pesquisar um endereco por ID e não encontra-lo")
-    void deveRetornarNotFoundExceptionAoPesquisarEnderecoPorIdENaoEncontrar() throws Exception {
-        when(enderecoService.findEnderecoById(anyLong())).thenThrow(NotFoundException.class);
-        mockMvc.perform(get("/enderecos/1"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @DisplayName("Deve retornar uma lista de enderecos")
-    void deveRetornarListaDeEnderecos() throws Exception {
-        List<Endereco> pessoas = List.of(criarPessoa());
-        when(enderecoService.findAllPessoas()).thenReturn(pessoas);
-        String listaEsperada = mockMvc.perform(get("/pessoas"))
-                .andExpect(status().isOk())
-                .andReturn().getResponse()
-                .getContentAsString();
-        assertEquals(listaEsperada, mapper.writeValueAsString(pessoas));
-    }
-
-    @Test
-    @DisplayName("Deve salvar uma pessoa")
-    void deveSalvarUmAutor() throws Exception {
-        when(enderecoService.savePessoa(criarPessoa())).thenReturn(criarPessoa());
-        String salvarPessoa = mapper.writeValueAsString(criarPessoa());
-        mockMvc.perform(post("/pessoas")
+    @DisplayName("Deve salvar um endereco")
+    void deveSalvarUmEndereco() throws Exception {
+        when(enderecoService.saveEndereco(criarEndereco())).thenReturn(criarEndereco());
+        String salvarEndereco = mapper.writeValueAsString(criarEndereco());
+        mockMvc.perform(post("/enderecos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(salvarPessoa))
-                .andExpect(content().json(salvarPessoa))
+                        .content(salvarEndereco))
+                .andExpect(content().json(salvarEndereco))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    @DisplayName("Deve retornar DomainBusinessException ao salvar uma pessoa sem nome")
-    void deveRetornarDomainBusinessExceptionAoSalvarUmaPessoaSemNome() throws Exception {
-        doThrow(new DomainBusinessException("")).when(enderecoService).savePessoa(criarPessoa());
-        String salvarPessoaVazio = mapper.writeValueAsString(criarPessoa());
-        mockMvc.perform(post("/pessoas")
+    @DisplayName("Deve retornar DomainBusinessException ao salvar um endereco sem nome")
+    void deveRetornarDomainBusinessExceptionAoSalvarUmEnderecoSemNome() throws Exception {
+        doThrow(new DomainBusinessException("")).when(enderecoService).saveEndereco(criarEndereco());
+        String salvarEnderecoVazio = mapper.writeValueAsString(criarEndereco());
+        mockMvc.perform(post("/enderecos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(salvarPessoaVazio))
+                        .content(salvarEnderecoVazio))
                 .andExpect(status().isUnprocessableEntity());
     }
-
-    @Test
-    @DisplayName("Deve atualizar uma pessoa")
-    void deveAtualizarUmaPessoa() throws Exception {
-        when(enderecoService.updatePessoa(criarPessoa())).thenReturn(criarPessoa());
-        String atualizarPessoa = mapper.writeValueAsString(criarPessoa());
-        mockMvc.perform(put("/pessoas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(atualizarPessoa))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Deve retornar NotFoundException ao tentar atualziar uma pessoa e não encnotra-lo.")
-    void deveRetornarNotFoundExceptionAoTentarAtualizarUmaPessoaENaoEncontrar() throws Exception {
-        when(enderecoService.updatePessoa(criarPessoa())).thenThrow(NotFoundException.class);
-        String pessoaNaoEncontrado = mapper.writeValueAsString(criarPessoa());
-        mockMvc.perform(put("/pessoas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(pessoaNaoEncontrado))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @DisplayName("Deve apagar uma pessoa por ID")
-    void deveApagarPessoaPorId() throws Exception {
-        when(enderecoService.findPessoaById(1L)).thenReturn(criarPessoa());
-        mockMvc.perform(delete("/pessoas/1"))
-                .andExpect(status().isNoContent());
-        verify(enderecoService, times(1)).deletePessoa(criarPessoa().getId());
-    }
-
-    @Test
-    @DisplayName("Deve retornar Not Found ao tentar apagar uma pessoa por ID e não encontrar")
-    void deveRetornarNotFoundAoTentarApagarPessoaPorIdENaoEncontrar() throws Exception {
-        doThrow(new NotFoundException("")).when(enderecoService).deletePessoa(5L);
-        mockMvc.perform(delete("/pessoas/5"))
-                .andExpect(status().isNotFound());
-    }
-
-}
+//
+//    @Test
+//    @DisplayName("Deve atualizar um endereco")
+//    void deveAtualizarUmEndereco() throws Exception {
+//        when(enderecoService.updateEndereco(criarEndereco())).thenReturn(criarEndereco());
+//        String atualizarEndereco = mapper.writeValueAsString(criarEndereco());
+//        mockMvc.perform(put("/enderecos")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(atualizarEndereco))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    @DisplayName("Deve retornar NotFoundException ao tentar atualziar um endereco e não encontra-lo.")
+//    void deveRetornarNotFoundExceptionAoTentarAtualizarUmEnderecoENaoEncontrar() throws Exception {
+//        when(enderecoService.updateEndereco(criarEndereco())).thenThrow(NotFoundException.class);
+//        String enderecoNaoEncontrado = mapper.writeValueAsString(criarEndereco());
+//        mockMvc.perform(put("/enderecos")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(enderecoNaoEncontrado))
+//                .andExpect(status().isNotFound());
+//    }
+//
+//    @Test
+//    @DisplayName("Deve apagar um endereco por ID")
+//    void deveApagarEnderecoPorId() throws Exception {
+//        when(enderecoService.findEnderecoById(1L)).thenReturn(criarEndereco());
+//        mockMvc.perform(delete("/enderecos/1"))
+//                .andExpect(status().isNoContent());
+//        verify(enderecoService, times(1)).deleteEndereco(criarEndereco().getId());
+//    }
+//
+//    @Test
+//    @DisplayName("Deve retornar Not Found ao tentar apagar um endereco por ID e não encontrar")
+//    void deveRetornarNotFoundAoTentarApagarEnderecoPorIdENaoEncontrar() throws Exception {
+//        doThrow(new NotFoundException("")).when(enderecoService).deleteEndereco(5L);
+//        mockMvc.perform(delete("/enderecos/5"))
+//                .andExpect(status().isNotFound());
+//    }
 
 }

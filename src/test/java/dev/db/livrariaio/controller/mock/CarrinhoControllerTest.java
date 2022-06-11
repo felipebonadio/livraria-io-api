@@ -80,6 +80,19 @@ public class CarrinhoControllerTest {
     }
 
     @Test
+    @DisplayName("Deve criar um carrinho")
+    void deveCriarUmCarrinho() throws Exception {
+        when(carrinhoService.saveCarrinho(criarCarrinhoDTO())).thenReturn(criarCarrinhoDTO());
+        String salvarCarrinho = new ObjectMapper().writeValueAsString(criarCarrinhoDTO());
+        mockMvc.perform(post("/carrinhos/criar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(salvarCarrinho))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        assertEquals(salvarCarrinho, new ObjectMapper().writeValueAsString(criarCarrinhoDTO()));
+    }
+
+    @Test
     @DisplayName("Deve adicionar um item ao carrinho")
     void deveAdicionarUmItemAoCarrinho() throws Exception{
         Carrinho carrinho = criarCarrinho();

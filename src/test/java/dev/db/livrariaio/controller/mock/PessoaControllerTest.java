@@ -69,7 +69,7 @@ public class PessoaControllerTest {
 
     @Test
     @DisplayName("Deve salvar uma pessoa")
-    void deveSalvarUmAutor() throws Exception {
+    void deveSalvarUmaPessoa() throws Exception {
         when(pessoaService.savePessoa(criarPessoa())).thenReturn(criarPessoa());
         String salvarPessoa = mapper.writeValueAsString(criarPessoa());
         mockMvc.perform(post("/pessoas")
