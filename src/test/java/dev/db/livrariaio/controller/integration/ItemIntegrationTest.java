@@ -64,7 +64,7 @@ public class ItemIntegrationTest extends BaseIT {
         CarrinhoDTO carrinho = new CarrinhoDTO(1L);
         carrinhoRepository.save(CarrinhoMapper.dtoToCarrinho(carrinho));
 
-        Item item = new Item(1L, CarrinhoMapper.dtoToCarrinho(carrinho), livro, 1, new BigDecimal("50.00"));
+        Item item = new Item(1L, livro, 1, new BigDecimal("50.00"));
 
         ItemDTO itemDTO = ItemMapper.itemToDTO(item);
         ResponseEntity<ItemDTO> responseItem = this.restTemplate.postForEntity(baseUrl, itemDTO, ItemDTO.class);
@@ -94,7 +94,7 @@ public class ItemIntegrationTest extends BaseIT {
         CarrinhoDTO carrinho = new CarrinhoDTO(1L);
         carrinhoRepository.save(CarrinhoMapper.dtoToCarrinho(carrinho));
 
-        Item item = new Item(1L, CarrinhoMapper.dtoToCarrinho(carrinho), livro, 1, new BigDecimal("50.00"));
+        Item item = new Item(1L, livro, 1, new BigDecimal("50.00"));
 
         ItemDTO itemDTO = ItemMapper.itemToDTO(item);
         ResponseEntity<ItemDTO> responseItem = this.restTemplate.postForEntity(baseUrl, itemDTO, ItemDTO.class);

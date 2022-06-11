@@ -42,7 +42,4 @@ public class Autor {
     private String descricao;
 
     private LocalDate dataCriacao;
-
-    @OneToMany(mappedBy = "autor")
-    private List<Livro> livros;
 }

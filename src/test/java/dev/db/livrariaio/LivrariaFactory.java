@@ -123,4 +123,26 @@ public class LivrariaFactory {
         carrinho.setId(1L);
         return carrinho;
     }
+
+    public static Endereco criarEndereco(){
+        Endereco endereco = new Endereco();
+        endereco.setId(1L);
+        endereco.setBairro("Bairro bonito");
+        endereco.setLocalidade("Cidade bonita");
+        endereco.setLogradouro("Rua bonita");
+        endereco.setCep("12345");
+        endereco.setUf("Estado bonito");
+        endereco.setComplemento("Complemento bonito");
+        return endereco;
+    }
+
+    public static Pessoa criarPessoa(){
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome("Pessoa bonita");
+        pessoa.setCpf("12345");
+        pessoa.setEndereco(criarEndereco());
+        pessoa.setCarrinho(criarCarrinho());
+        pessoa.setId(1L);
+        return pessoa;
+    }
 }
